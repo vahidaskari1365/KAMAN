@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from "next/server"
 import { db } from "@/lib/db"
+import { ensureSeed } from "@/lib/ensure-seed"
 
 // GET /api/dashboard - آمار کلی برای داشبورد
 export async function GET() {
   try {
+    // اگر دیتابیس خالی است، داده‌های نمونه را خودکار بساز
+    await ensureSeed()
+
     const [organizations, contracts, files] = await Promise.all([
       db.organization.count(),
       db.contract.count(),

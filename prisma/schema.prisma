@@ -5,6 +5,9 @@ generator client {
 
 datasource db {
   provider = "sqlite"
+  // DATABASE_URL باید در محیط اجرا تنظیم شود.
+  // سندباکس: file:/home/z/my-project/db/custom.db (در .env)
+  // Render / سرور: file:./db/custom.db (در render.yaml یا .env)
   url      = env("DATABASE_URL")
 }
 

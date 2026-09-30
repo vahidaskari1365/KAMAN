@@ -1,0 +1,24 @@
+# render.yaml - دیپلوی یک‌کلیکی نرم‌افزار بایگانی کمان روی Render
+# لینک دیپلوی: https://render.com/deploy?repo=https://github.com/vahidaskari1365/KAMAN
+
+services:
+  - type: web
+    name: kaman-archive
+    runtime: node
+    plan: free
+    region: singapore  # یا frankfurt / oregon - به ایران نزدیک‌تر
+    branch: main
+    rootDir: .
+    buildCommand: bun install && bun run build
+    startCommand: bun run start
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        value: file:./db/custom.db
+      - key: NEXTAUTH_URL
+        sync: false
+      - key: PORT
+        value: 10000
