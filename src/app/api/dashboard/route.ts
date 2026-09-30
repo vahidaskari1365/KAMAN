@@ -111,6 +111,10 @@ export async function GET() {
     })
   } catch (e: any) {
     console.error("GET /api/dashboard error:", e)
-    return NextResponse.json({ error: e.message }, { status: 500 })
+    // خطا را با ۲۰۰ برمی‌گردانیم تا فرانت‌اند بتواند آن را به‌جای صفحه‌ی خالی نمایش دهد
+    return NextResponse.json({
+      data: null,
+      error: `خطای دیتابیس: ${e.message}`,
+    })
   }
 }

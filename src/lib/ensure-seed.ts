@@ -18,10 +18,17 @@ export async function ensureSeed() {
   if (seeding) return
   seeding = true
   try {
-    // ۱) جداول را اگر وجود ندارند بساز (برای Vercel و محیط‌های بدون prisma db push)
-    await ensureSchema(db)
+    // ۱) بررسی کن آیا جدول Organization وجود دارد
+    let count: number
+    try {
+      count = await db.organization.count()
+    } catch {
+      // جدول وجود ندارد (مثلاً sqlite روی serverless که prisma db push
+      // در آن اجرا نشده) → جداول را با DDL بساز
+      await ensureSchema(db)
+      count = await db.organization.count().catch(() => 0)
+    }
     // ۲) اگر هیچ سازمانی وجود ندارد، داده‌های نمونه بساز
-    const count = await db.organization.count().catch(() => 0)
     if (count === 0) {
       await seedDemoData()
     }

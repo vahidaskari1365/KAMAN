@@ -41,8 +41,12 @@ import {
 } from "recharts"
 
 export function DashboardView() {
-  const { data, isLoading } = useDashboard()
+  const resp = useDashboard()
+  const data = resp.data?.data
+  const dbError = resp.data?.error
+  const isLoading = resp.isLoading
   const { setView, openContract, openOrganization, navigateToContracts } = useKamanStore()
+  const { refresh } = useKamanStore()
 
   if (isLoading) {
     return (
@@ -60,7 +64,49 @@ export function DashboardView() {
     )
   }
 
-  if (!data) return null
+  // اگر خطای دیتابیس رخ داد، به‌جای صفحه‌ی خالی پیغام خطا + راهنما نشان بده
+  if (dbError || !data) {
+    return (
+      <div className="space-y-5">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">داشبورد</h1>
+          <p className="text-sm text-muted-foreground mt-1">نمای کلی سامانه</p>
+        </div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="rounded-2xl border-2 border-dashed border-rose-500/40 bg-rose-500/5 p-6"
+        >
+          <div className="flex items-start gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-rose-500/15">
+              <AlertTriangle className="h-5 w-5 text-rose-600 dark:text-rose-400" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h3 className="font-bold text-base">اتصال به دیتابیس برقرار نشد</h3>
+              <p className="text-sm text-muted-foreground mt-1 break-words" dir="ltr">
+                {dbError || "خطای ناشناخته"}
+              </p>
+              <div className="mt-3 rounded-lg bg-card border p-3 text-sm space-y-2">
+                <p className="font-medium">راه‌حل برای Vercel:</p>
+                <ol className="list-decimal list-inside space-y-1 text-muted-foreground text-xs">
+                  <li>در پروژه‌ی Vercel به تب <b>Storage</b> بروید.</li>
+                  <li>روی <b>Create Database → Postgres (Neon)</b> کلیک و یک DB رایگان بسازید.</li>
+                  <li>آن را به پروژه‌ی خود <b>Connect</b> کنید (Vercel خودکار <code>DATABASE_URL</code> را می‌سازد).</li>
+                  <li>تب <b>Deployments → Redeploy</b> بزنید. جدول‌ها و داده‌های نمونه خودکار ساخته می‌شوند.</li>
+                </ol>
+              </div>
+              <div className="mt-3 flex gap-2">
+                <Button size="sm" variant="default" onClick={() => refresh()}>
+                  <Activity className="ml-1 h-4 w-4" />
+                  تلاش دوباره
+                </Button>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    )
+  }
 
   const pieData = [
     { name: "خرید / فروش", value: data.purchaseContracts, color: "var(--chart-2)" },

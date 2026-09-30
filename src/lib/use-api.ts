@@ -37,7 +37,7 @@ export function useDashboard() {
   const { refreshKey } = useKamanStore()
   return useQuery({
     queryKey: ["dashboard", refreshKey],
-    queryFn: () => jsonFetch("/api/dashboard").then((r) => r.data),
+    queryFn: () => jsonFetch("/api/dashboard"),
   })
 }
 
