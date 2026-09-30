@@ -13,18 +13,16 @@ const vazirmatn = Vazirmatn({
 });
 
 export const metadata: Metadata = {
-  title: "نرم‌افزار بایگانی پردازش تصویر کمان",
+  title: "بایگانی",
   description:
     "سامانه مدیریت و بایگانی قراردادهای سازمانی - جستجو، فیلتر، آپلود فایل‌های اسکن شده و گزارش‌گیری هوشمند",
   keywords: [
-    "کامن",
     "بایگانی",
     "قرارداد",
-    "پردازش تصویر",
     "مدیریت قرارداد",
-    "KAMAN",
+    "سامانه قراردادها",
   ],
-  authors: [{ name: "KAMAN Archive System" }],
+  authors: [{ name: "بایگانی" }],
   icons: {
     icon: "/logo.svg",
   },

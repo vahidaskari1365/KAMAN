@@ -124,7 +124,7 @@ export function DashboardView() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight">داشبورد</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            {formatJalaliLong(new Date())} - نمای کلی سامانه بایگانی کمان
+            {formatJalaliLong(new Date())} - نمای کلی سامانه بایگانی
           </p>
         </div>
         <Button variant="outline" size="sm" onClick={() => setView("reports")}>
@@ -400,7 +400,7 @@ function EmptyState() {
       <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#046bd2]/15">
         <FileText className="h-8 w-8 text-[#046bd2] dark:text-[#5aa9ff]" />
       </div>
-      <h3 className="text-lg font-bold">به سامانه بایگانی کمان خوش آمدید</h3>
+      <h3 className="text-lg font-bold">به سامانه بایگانی خوش آمدید</h3>
       <p className="mt-1 text-sm text-muted-foreground max-w-md mx-auto">
         هنوز داده‌ای در سیستم ثبت نشده است. می‌توانید با یک کلیک داده‌های نمونه
         شامل سازمان‌ها و قراردادها را ایجاد کنید تا با امکانات آشنا شوید.

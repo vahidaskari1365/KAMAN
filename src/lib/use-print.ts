@@ -82,7 +82,7 @@ export function useKamanPrint() {
         <body>
           <div class="${sizeClass} print-area">
             <div class="kaman-header">
-              <h1>نرم‌افزار بایگانی پردازش تصویر کمان</h1>
+              <h1>بایگانی</h1>
               <p>گزارش تولید شده در ${new Date().toLocaleDateString("fa-IR")}</p>
             </div>
             ${node.innerHTML}

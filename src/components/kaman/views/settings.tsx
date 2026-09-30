@@ -203,7 +203,7 @@ export function SettingsView() {
         <CardContent className="space-y-2 text-sm">
           <div className="flex justify-between">
             <span className="text-muted-foreground">نام:</span>
-            <span className="font-medium">نرم‌افزار بایگانی پردازش تصویر کمان</span>
+            <span className="font-medium">بایگانی</span>
           </div>
           <div className="flex justify-between">
             <span className="text-muted-foreground">نسخه:</span>

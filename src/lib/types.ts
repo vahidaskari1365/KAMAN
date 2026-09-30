@@ -1,4 +1,4 @@
-// تایپ‌های مشترک نرم‌افزار بایگانی کمان
+// تایپ‌های مشترک سامانه بایگانی
 
 export type ContractType = "PURCHASE" | "SUPPORT"
 export type ContractStatus = "ACTIVE" | "EXPIRED" | "TERMINATED" | "PENDING"

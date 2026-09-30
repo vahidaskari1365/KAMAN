@@ -111,7 +111,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <Topbar onMenu={() => setMobileOpen(true)} notifCount={notifCount} />
         <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
         <footer className="mt-auto border-t bg-card/50 px-6 py-4 text-center text-xs text-muted-foreground no-print">
-          <span className="font-medium text-foreground">نرم‌افزار بایگانی پردازش تصویر کمان</span>
+          <span className="font-medium text-foreground">بایگانی</span>
           {"  "}© {new Date().getFullYear()} - تمامی حقوق محفوظ است
         </footer>
       </div>
@@ -138,8 +138,8 @@ function SidebarContent({
           <Archive className="h-6 w-6" />
         </div>
         <div className="min-w-0">
-          <p className="font-bold text-base leading-tight">کامن</p>
-          <p className="text-[11px] text-muted-foreground truncate">بایگانی هوشمند قراردادها</p>
+          <p className="font-bold text-base leading-tight">بایگانی</p>
+          <p className="text-[11px] text-muted-foreground truncate">سامانه مدیریت قراردادها</p>
         </div>
       </div>
 

@@ -1,4 +1,4 @@
-// ابزارهای تاریخ و عدد فارسی - نرم‌افزار بایگانی کمان
+// ابزارهای تاریخ و عدد فارسی - سامانه بایگانی
 
 // تبدیل تاریخ میلادی به شمسی (جلالی)
 export function toJalali(gy: number, gm: number, gd: number): [number, number, number] {
