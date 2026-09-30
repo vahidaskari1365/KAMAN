@@ -8,11 +8,9 @@ import path from 'path'
 if (!process.env.DATABASE_URL) {
   const isServerless =
     process.env.VERCEL === '1' ||
-    !!process.env.AWS_LAMBDA_FUNCTION_NAME ||
-    !!process.env.NETLLY // netlify
+    !!process.env.AWS_LAMBDA_FUNCTION_NAME
   if (isServerless) {
     process.env.DATABASE_URL = 'file:/tmp/kaman.db'
-    // فایل‌های آپلودی هم در /tmp
     if (!process.env.UPLOAD_DIR) process.env.UPLOAD_DIR = '/tmp/kaman-uploads'
   } else {
     try {
@@ -21,6 +19,20 @@ if (!process.env.DATABASE_URL) {
       // ignore
     }
     process.env.DATABASE_URL = 'file:./db/custom.db'
+  }
+}
+
+// مطمئن شو پوشه‌ی پدر فایل SQLite وجود دارد (برای مسیرهای مطلق روی سرور)
+const dbUrl = process.env.DATABASE_URL || ''
+if (dbUrl.startsWith('file:')) {
+  const filePath = dbUrl.replace(/^file:/, '')
+  // فقط مسیرهای مطلق را مدیریت کن (نسبی توسط next start مدیریت می‌شود)
+  if (filePath.startsWith('/')) {
+    try {
+      mkdirSync(path.dirname(filePath), { recursive: true })
+    } catch {
+      // ignore
+    }
   }
 }
 
