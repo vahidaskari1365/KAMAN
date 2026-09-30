@@ -1,0 +1,92 @@
+// KAMAN - نرم‌افزار بایگانی پردازش تصویر کمان
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/// سازمان‌ها / شرکت‌ها
+model Organization {
+  id           String     @id @default(cuid())
+  name         String
+  type         String?    // نوع سازمان (دولتی، خصوصی، دانشگاهی، پزشکی ...)
+  economicCode String?    // کد اقتصادی
+  nationalId   String?    // شناسه ملی
+  phone        String?
+  email        String?
+  address     String?
+  contactPerson String?  // شخص رابط
+  notes       String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  contracts   Contract[]
+}
+
+/// قراردادها
+model Contract {
+  id             String         @id @default(cuid())
+  contractNumber String         // شماره قرارداد
+  organizationId String
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  type           String         // PURCHASE (خرید/فروش) | SUPPORT (خدمات و پشتیبانی)
+  title          String         // عنوان قرارداد
+  startDate      DateTime       // تاریخ شروع
+  endDate        DateTime       // تاریخ پایان
+  amount         Float?         // مبلغ قرارداد
+  currency       String?        @default("ریال") // واحد پول
+  description    String?
+  status         String         @default("ACTIVE") // ACTIVE | EXPIRED | TERMINATED | PENDING
+  reminderDays   Int?           // چند روز قبل از پایان اعلان بدهد (پیش‌فرض ۶۰)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  files          ContractFile[]
+
+  @@index([organizationId])
+  @@index([type])
+  @@index([status])
+  @@index([endDate])
+}
+
+/// فایل‌های اسکن شده قرارداد
+model ContractFile {
+  id           String   @id @default(cuid())
+  contractId   String
+  contract     Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  filename     String   // نام ذخیره شده روی دیسک
+  originalName String   // نام اصلی فایل
+  filepath     String   // مسیر فایل
+  fileType     String   // image/jpeg, application/pdf ...
+  fileSize     Int      // به بایت
+  category     String? // دسته فایل (اصل قرارداد، الحاقیه، فاکتور، ...)
+  uploadedAt   DateTime @default(now())
+
+  @@index([contractId])
+}
+
+/// کاربران سیستم
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  username  String   @unique
+  password  String
+  role      String   @default("USER") // ADMIN | USER | VIEWER
+  email     String?
+  phone     String?
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/// لاگ فعالیت‌ها
+model ActivityLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String   // CREATE, UPDATE, DELETE, VIEW ...
+  entity    String   // CONTRACT, ORGANIZATION, USER ...
+  entityId  String?
+  detail    String?
+  createdAt DateTime @default(now())
+}

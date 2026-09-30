@@ -1,0 +1,229 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-vazirmatn);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+/* ====== تم روشن - کمان (برند kaman.ir) ======
+   رنگ اصلی: آبی #046BD2 | روشن‌تر: #0096FF | متن تیره: #33373D
+*/
+:root {
+  --radius: 0.75rem;
+  /* خاکستری گرم روشن (مشابه پس‌زمینه kaman.ir) */
+  --background: oklch(0.93 0.004 30);
+  --foreground: oklch(0.34 0.008 250);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.34 0.008 250);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.34 0.008 250);
+  /* آبی برند کمان #046BD2 */
+  --primary: oklch(0.547 0.191 251);
+  --primary-foreground: oklch(0.99 0.005 30);
+  --secondary: oklch(0.95 0.012 250);
+  --secondary-foreground: oklch(0.4 0.02 250);
+  --muted: oklch(0.95 0.005 30);
+  --muted-foreground: oklch(0.5 0.012 250);
+  /* آبی روشن برند #0096FF برای تأکید */
+  --accent: oklch(0.678 0.176 250);
+  --accent-foreground: oklch(0.99 0.005 30);
+  --destructive: oklch(0.58 0.22 27);
+  --border: oklch(0.9 0.005 250);
+  --input: oklch(0.92 0.005 250);
+  --ring: oklch(0.547 0.191 251);
+  --chart-1: oklch(0.547 0.191 251);   /* آبی برند */
+  --chart-2: oklch(0.678 0.176 250);   /* آبی روشن */
+  --chart-3: oklch(0.62 0.18 30);      /* نارنجی */
+  --chart-4: oklch(0.7 0.15 165);      /* سبز */
+  --chart-5: oklch(0.7 0.16 320);      /* صورتی */
+  --sidebar: oklch(0.97 0.006 250);
+  --sidebar-foreground: oklch(0.34 0.008 250);
+  --sidebar-primary: oklch(0.547 0.191 251);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.93 0.025 251);
+  --sidebar-accent-foreground: oklch(0.4 0.05 251);
+  --sidebar-border: oklch(0.9 0.005 250);
+  --sidebar-ring: oklch(0.547 0.191 251);
+}
+
+/* ====== تم تیره - کمان ====== */
+.dark {
+  --background: oklch(0.2 0.015 251);
+  --foreground: oklch(0.97 0.005 30);
+  --card: oklch(0.245 0.018 251);
+  --card-foreground: oklch(0.97 0.005 30);
+  --popover: oklch(0.245 0.018 251);
+  --popover-foreground: oklch(0.97 0.005 30);
+  --primary: oklch(0.678 0.176 250);
+  --primary-foreground: oklch(0.2 0.015 251);
+  --secondary: oklch(0.3 0.02 251);
+  --secondary-foreground: oklch(0.97 0.005 30);
+  --muted: oklch(0.3 0.015 251);
+  --muted-foreground: oklch(0.7 0.01 250);
+  --accent: oklch(0.5 0.16 250);
+  --accent-foreground: oklch(0.97 0.005 30);
+  --destructive: oklch(0.7 0.19 22);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.678 0.176 250);
+  --chart-1: oklch(0.678 0.176 250);
+  --chart-2: oklch(0.72 0.16 30);
+  --chart-3: oklch(0.65 0.18 165);
+  --chart-4: oklch(0.65 0.15 320);
+  --chart-5: oklch(0.7 0.16 85);
+  --sidebar: oklch(0.23 0.017 251);
+  --sidebar-foreground: oklch(0.97 0.005 30);
+  --sidebar-primary: oklch(0.678 0.176 250);
+  --sidebar-primary-foreground: oklch(0.2 0.015 251);
+  --sidebar-accent: oklch(0.32 0.02 251);
+  --sidebar-accent-foreground: oklch(0.97 0.005 30);
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: oklch(0.678 0.176 250);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "ss01", "ss02";
+  }
+  /* اسکرول‌بار سفارشی */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in oklch, var(--primary) 30%, transparent);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in oklch, var(--primary) 55%, transparent);
+    background-clip: content-box;
+  }
+}
+
+/* ====== کلاس‌های کمکی کمان ====== */
+.kaman-gradient {
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklch, var(--primary) 12%, transparent),
+    color-mix(in oklch, var(--accent) 8%, transparent)
+  );
+}
+
+.kaman-card-glow {
+  box-shadow: 0 0 0 1px color-mix(in oklch, var(--primary) 12%, transparent),
+    0 8px 30px -8px color-mix(in oklch, var(--primary) 22%, transparent);
+}
+
+.kaman-glass {
+  backdrop-filter: blur(12px);
+  background: color-mix(in oklch, var(--card) 70%, transparent);
+}
+
+/* پالس برای اعلان‌ها */
+@keyframes kaman-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 color-mix(in oklch, var(--destructive) 50%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 8px color-mix(in oklch, var(--destructive) 0%, transparent);
+  }
+}
+.kaman-pulse {
+  animation: kaman-pulse 2s ease-in-out infinite;
+}
+
+/* پرینت */
+@media print {
+  @page {
+    margin: 1cm;
+  }
+  body {
+    background: white !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-area {
+    box-shadow: none !important;
+    border: none !important;
+  }
+  .print-full {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+.print-a4 .print-area {
+  width: 21cm;
+}
+.print-a5 .print-area {
+  width: 14.8cm;
+}
+.print-letter .print-area {
+  width: 21.6cm;
+}
+.print-legal .print-area {
+  width: 21.6cm;
+}
+
+/* انیمیشن ورود کارت‌ها */
+@keyframes kaman-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.kaman-fade-up {
+  animation: kaman-fade-up 0.4s ease-out backwards;
+}
