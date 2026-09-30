@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import {
   FileText,
@@ -11,6 +11,7 @@ import {
   Calendar,
   AlertTriangle,
   X,
+  Paperclip,
 } from "lucide-react"
 import { useContracts } from "@/lib/use-api"
 import { useKamanStore } from "@/lib/store"
@@ -26,6 +27,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
+import { Toggle } from "@/components/ui/toggle"
 import {
   formatJalali,
   formatAmount,
@@ -38,10 +40,33 @@ import { ContractForm } from "./contract-form"
 
 export function ContractsView() {
   const { selected, clearSelected, globalSearch, setGlobalSearch } = useKamanStore()
-  const [typeFilter, setTypeFilter] = useState("ALL")
-  const [statusFilter, setStatusFilter] = useState("ALL")
-  const [expiringDays, setExpiringDays] = useState("0")
+  // خواندن preset از store در زمان mount (نقل از داشبورد)
+  const [preset] = useState(() => useKamanStore.getState().contractsFilter)
+  useEffect(() => {
+    useKamanStore.setState({ contractsFilter: null })
+  }, [])
+
+  const [typeFilter, setTypeFilter] = useState(preset?.type || "ALL")
+  const [statusFilter, setStatusFilter] = useState(preset?.status || "ALL")
+  const [expiringDays, setExpiringDays] = useState(
+    preset?.expiringInDays ? String(preset.expiringInDays) : "0"
+  )
+  const [expiredOnly, setExpiredOnly] = useState(!!preset?.expiredOnly)
+  const [hasFiles, setHasFiles] = useState(!!preset?.hasFiles)
   const [formOpen, setFormOpen] = useState(false)
+
+  // انتخاب ترکیبی بازه زمانی: عدد = رو به اتمام، "EXPIRED" = منقضی شده
+  const dateRange = expiredOnly ? "EXPIRED" : expiringDays
+
+  const setDateRange = (v: string) => {
+    if (v === "EXPIRED") {
+      setExpiredOnly(true)
+      setExpiringDays("0")
+    } else {
+      setExpiredOnly(false)
+      setExpiringDays(v)
+    }
+  }
 
   const q = globalSearch.trim()
 
@@ -50,6 +75,8 @@ export function ContractsView() {
   if (typeFilter !== "ALL") filters.type = typeFilter
   if (statusFilter !== "ALL") filters.status = statusFilter
   if (expiringDays !== "0") filters.expiringInDays = expiringDays
+  if (expiredOnly) filters.expiredOnly = "1"
+  if (hasFiles) filters.hasFiles = "1"
 
   const { data, isLoading } = useContracts(filters)
 
@@ -63,16 +90,34 @@ export function ContractsView() {
     setTypeFilter("ALL")
     setStatusFilter("ALL")
     setExpiringDays("0")
+    setExpiredOnly(false)
+    setHasFiles(false)
   }
 
   const hasFilters =
-    q || typeFilter !== "ALL" || statusFilter !== "ALL" || expiringDays !== "0"
+    q ||
+    typeFilter !== "ALL" ||
+    statusFilter !== "ALL" ||
+    expiringDays !== "0" ||
+    expiredOnly ||
+    hasFiles
+
+  // عنوان صفحه بر اساس preset
+  const pageTitle = expiredOnly
+    ? "قراردادهای منقضی شده"
+    : preset?.expiringInDays
+      ? `قراردادهای رو به اتمام (${toPersianDigits(preset.expiringInDays!)} روز)`
+      : preset?.hasFiles
+        ? "قراردادهای دارای فایل"
+        : preset?.status === "ACTIVE"
+          ? "قراردادهای فعال"
+          : "قراردادها"
 
   return (
     <div className="space-y-5">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">قراردادها</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{pageTitle}</h1>
           <p className="text-sm text-muted-foreground mt-1">
             مدیریت قراردادهای خرید و پشتیبانی
           </p>
@@ -124,11 +169,11 @@ export function ContractsView() {
                 <SelectItem value="PENDING">در انتظار</SelectItem>
               </SelectContent>
             </Select>
-            <Select value={expiringDays} onValueChange={setExpiringDays}>
+            <Select value={dateRange} onValueChange={setDateRange}>
               <SelectTrigger className="w-44">
                 <div className="flex items-center gap-2">
                   <AlertTriangle className="h-4 w-4" />
-                  <SelectValue placeholder="رو به اتمام" />
+                  <SelectValue placeholder="بازه زمانی" />
                 </div>
               </SelectTrigger>
               <SelectContent>
@@ -137,12 +182,22 @@ export function ContractsView() {
                 <SelectItem value="30">۱ ماه آینده</SelectItem>
                 <SelectItem value="60">۲ ماه آینده</SelectItem>
                 <SelectItem value="90">۳ ماه آینده</SelectItem>
+                <SelectItem value="EXPIRED">منقضی شده‌ها</SelectItem>
               </SelectContent>
             </Select>
+            <Toggle
+              pressed={hasFiles}
+              onPressedChange={setHasFiles}
+              aria-label="فقط دارای فایل"
+              className="h-9 gap-1.5"
+            >
+              <Paperclip className="h-4 w-4" />
+              دارای فایل
+            </Toggle>
             {hasFilters && (
               <Button variant="ghost" size="sm" onClick={clearFilters}>
                 <X className="ml-1 h-4 w-4" />
-                پاک کردن فیلترها
+                پاک کردن
               </Button>
             )}
           </div>

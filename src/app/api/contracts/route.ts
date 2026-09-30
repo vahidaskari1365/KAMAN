@@ -12,6 +12,8 @@ export async function GET(req: NextRequest) {
     const status = searchParams.get("status") || ""
     const organizationId = searchParams.get("organizationId") || ""
     const expiringInDays = searchParams.get("expiringInDays") // عدد
+    const expiredOnly = searchParams.get("expiredOnly") === "1"
+    const hasFiles = searchParams.get("hasFiles") === "1"
     const sortBy = searchParams.get("sortBy") || "endDate"
     const sortOrder = searchParams.get("sortOrder") === "asc" ? "asc" : "desc"
 
@@ -31,13 +33,21 @@ export async function GET(req: NextRequest) {
     if (status) where.status = status
     if (organizationId) where.organizationId = organizationId
 
+    const now = new Date()
     if (expiringInDays) {
       const days = Number(expiringInDays)
-      const now = new Date()
       const future = new Date()
       future.setDate(future.getDate() + days)
       where.endDate = { gte: now, lte: future }
       where.status = "ACTIVE"
+    } else if (expiredOnly) {
+      // فقط قراردادهایی که تاریخ پایانشان گذشته و فسخ نشده‌اند
+      where.endDate = { lt: now }
+      where.status = { not: "TERMINATED" }
+    }
+
+    if (hasFiles) {
+      where.files = { some: {} }
     }
 
     const contracts = await db.contract.findMany({

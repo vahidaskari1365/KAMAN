@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { LucideIcon } from "lucide-react"
+import { LucideIcon, ArrowLeft } from "lucide-react"
 import { motion } from "framer-motion"
 
 interface StatCardProps {
@@ -11,6 +11,7 @@ interface StatCardProps {
   tone?: "primary" | "warning" | "danger" | "info" | "neutral"
   hint?: string
   className?: string
+  onClick?: () => void
 }
 
 const toneClasses: Record<string, string> = {
@@ -37,15 +38,32 @@ export function StatCard({
   tone = "primary",
   hint,
   className,
+  onClick,
 }: StatCardProps) {
+  const clickable = !!onClick
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35 }}
+      onClick={onClick}
+      role={clickable ? "button" : undefined}
+      tabIndex={clickable ? 0 : undefined}
+      onKeyDown={
+        clickable
+          ? (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault()
+                onClick!()
+              }
+            }
+          : undefined
+      }
       className={cn(
-        "relative overflow-hidden rounded-xl border bg-gradient-to-br p-5 kaman-card-glow",
+        "relative overflow-hidden rounded-xl border bg-gradient-to-br p-5 kaman-card-glow transition-all",
         toneClasses[tone],
+        clickable &&
+          "cursor-pointer hover:-translate-y-1 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         className
       )}
     >
@@ -68,6 +86,12 @@ export function StatCard({
           <Icon className="h-5 w-5" />
         </div>
       </div>
+      {clickable && (
+        <div className="absolute bottom-2 left-3 flex items-center gap-1 text-[10px] font-medium opacity-60">
+          مشاهده
+          <ArrowLeft className="h-3 w-3" />
+        </div>
+      )}
       <div
         className="pointer-events-none absolute -bottom-8 -left-8 h-24 w-24 rounded-full opacity-10 blur-2xl"
         style={{ background: "currentColor" }}

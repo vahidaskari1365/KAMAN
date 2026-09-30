@@ -42,7 +42,7 @@ import {
 
 export function DashboardView() {
   const { data, isLoading } = useDashboard()
-  const { setView, openContract, openOrganization } = useKamanStore()
+  const { setView, openContract, openOrganization, navigateToContracts } = useKamanStore()
 
   if (isLoading) {
     return (
@@ -95,6 +95,7 @@ export function DashboardView() {
           icon={Building2}
           tone="primary"
           hint="سازمان‌های ثبت شده"
+          onClick={() => setView("organizations")}
         />
         <StatCard
           title="کل قراردادها"
@@ -102,6 +103,7 @@ export function DashboardView() {
           icon={FileText}
           tone="info"
           hint={`${formatAmount(data.totalAmount)} مبلغ کل`}
+          onClick={() => navigateToContracts({})}
         />
         <StatCard
           title="قراردادهای فعال"
@@ -109,6 +111,7 @@ export function DashboardView() {
           icon={Activity}
           tone="success"
           hint={`${toPersianDigits(data.purchaseContracts)} خرید / ${toPersianDigits(data.supportContracts)} پشتیبانی`}
+          onClick={() => navigateToContracts({ status: "ACTIVE" })}
         />
         <StatCard
           title="رو به اتمام"
@@ -116,6 +119,7 @@ export function DashboardView() {
           icon={Clock}
           tone="warning"
           hint="کمتر از ۶۰ روز"
+          onClick={() => navigateToContracts({ expiringInDays: 60 })}
         />
       </div>
 
@@ -126,18 +130,23 @@ export function DashboardView() {
           value={toPersianDigits(data.expiredContracts)}
           icon={AlertTriangle}
           tone="danger"
+          hint="تاریخ پایان گذشته"
+          onClick={() => navigateToContracts({ expiredOnly: true })}
         />
         <StatCard
           title="فایل‌های آپلودی"
           value={toPersianDigits(data.totalFiles)}
           icon={HardDrive}
           tone="neutral"
+          hint="فایل‌های اسکن شده"
+          onClick={() => navigateToContracts({ hasFiles: true })}
         />
         <StatCard
           title="مبلغ کل قراردادها"
           value={formatAmount(data.totalAmount)}
           icon={Wallet}
           tone="primary"
+          onClick={() => navigateToContracts({})}
         />
         <StatCard
           title="میانگین مبلغ"
@@ -146,6 +155,7 @@ export function DashboardView() {
           )}
           icon={TrendingUp}
           tone="info"
+          onClick={() => setView("reports")}
         />
       </div>
 

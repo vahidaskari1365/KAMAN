@@ -15,6 +15,15 @@ interface SelectedEntity {
   contractId?: string
 }
 
+// فیلتر قراردادها که از داشبورد به صفحه‌ی قراردادها منتقل می‌شود
+export interface ContractsFilterPreset {
+  type?: string // PURCHASE | SUPPORT
+  status?: string // ACTIVE | EXPIRED | TERMINATED | PENDING
+  expiringInDays?: number
+  expiredOnly?: boolean
+  hasFiles?: boolean
+}
+
 interface KamanState {
   view: ViewKey
   setView: (v: ViewKey) => void
@@ -27,9 +36,13 @@ interface KamanState {
   // Refresh key برای بازخوانی داده‌ها
   refreshKey: number
   refresh: () => void
+  // فیلتر قراردادها برای انتقال از داشبورد
+  contractsFilter: ContractsFilterPreset | null
+  navigateToContracts: (filter?: ContractsFilterPreset) => void
+  consumeContractsFilter: () => ContractsFilterPreset | null
 }
 
-export const useKamanStore = create<KamanState>((set) => ({
+export const useKamanStore = create<KamanState>((set, get) => ({
   view: "dashboard",
   setView: (v) =>
     set(() => ({ view: v, selected: {} })),
@@ -43,4 +56,12 @@ export const useKamanStore = create<KamanState>((set) => ({
   setGlobalSearch: (s) => set(() => ({ globalSearch: s })),
   refreshKey: 0,
   refresh: () => set((s) => ({ refreshKey: s.refreshKey + 1 })),
+  contractsFilter: null,
+  navigateToContracts: (filter) =>
+    set(() => ({ view: "contracts", selected: {}, contractsFilter: filter || null })),
+  consumeContractsFilter: () => {
+    const f = get().contractsFilter
+    set(() => ({ contractsFilter: null }))
+    return f
+  },
 }))
