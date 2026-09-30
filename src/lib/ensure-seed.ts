@@ -1,6 +1,8 @@
 import { db } from "@/lib/db"
+import { ensureSchema } from "@/lib/schema-sql"
 import { promises as fs } from "fs"
 import path from "path"
+import { getUploadDir } from "@/lib/file-storage"
 
 let seeding = false
 
@@ -8,19 +10,21 @@ let seeding = false
 export async function ensureSeed() {
   try {
     // مطمئن شو پوشه‌ی آپلود وجود دارد
-    const uploadDir = path.join(process.cwd(), "db", "uploads")
-    await fs.mkdir(uploadDir, { recursive: true })
+    await fs.mkdir(getUploadDir(), { recursive: true })
   } catch {
     // ignore
   }
 
   if (seeding) return
-  const count = await db.organization.count().catch(() => 0)
-  if (count > 0) return
-
   seeding = true
   try {
-    await seedDemoData()
+    // ۱) جداول را اگر وجود ندارند بساز (برای Vercel و محیط‌های بدون prisma db push)
+    await ensureSchema(db)
+    // ۲) اگر هیچ سازمانی وجود ندارد، داده‌های نمونه بساز
+    const count = await db.organization.count().catch(() => 0)
+    if (count === 0) {
+      await seedDemoData()
+    }
   } catch (e) {
     console.error("[ensureSeed] خطا:", e)
   } finally {

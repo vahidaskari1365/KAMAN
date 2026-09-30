@@ -2,7 +2,11 @@ import { promises as fs } from "fs"
 import path from "path"
 import { randomUUID } from "crypto"
 
-const UPLOAD_DIR = path.join(process.cwd(), "db", "uploads")
+// مسیر ذخیره‌ی فایل‌های آپلودی. قابل تنظیم با env:
+// - محیط محلی / سرور با دیسک دائمی: پیش‌فرض db/uploads
+// - Vercel serverless: UPLOAD_DIR=/tmp/kaman-uploads (فایل‌سیستم موقت اما writable)
+const UPLOAD_DIR =
+  process.env.UPLOAD_DIR || path.join(process.cwd(), "db", "uploads")
 
 export async function ensureUploadDir() {
   try {
